@@ -10,9 +10,7 @@ from StreamSpliterV2.StreamSpliter2 import StreamSpliter2
 import os
 import webbrowser  
 
-from PyQt4.QtGui import *
-from PyQt4 import QtGui,QtCore
-import PyQt4
+from PyQt5 import QtGui, QtCore, Qt, QtWidgets
 from DownLinkMain import Ui_Form
 import sys
 from _dbus_bindings import String
@@ -20,15 +18,15 @@ from _dbus_bindings import String
 import xml.dom.minidom as minidom
 from xml.dom.minidom import Document
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 import json
 
 from kiss_decoder import KISS_Decoder
 
-class MyForm(QtGui.QMainWindow):
+class MyForm(QtWidgets.QMainWindow):
     def __init__(self, parent=None): 
-        QtGui.QWidget.__init__(self, parent) 
+        QtWidgets.QWidget.__init__(self, parent) 
         self.ui = Ui_Form()    
         self.ui.setupUi(self)  
         self.ui.cmd_StartProxy.clicked.connect(self.StartProxy)
@@ -39,9 +37,9 @@ class MyForm(QtGui.QMainWindow):
         self.ui.link_BY2HIT.clicked.connect(self.Link_BY2HIT)
         self.ui.link_HIT.clicked.connect(self.Link_HIT)
         self.ui.link_Lilac.clicked.connect(self.Link_Lilac)
-        self.refreshtimer=QtCore.QTimer()
-        QtCore.QObject.connect(self.refreshtimer,QtCore.SIGNAL("timeout()"), self.OnTimer)
-        
+        self.refreshtimer = QtCore.QTimer(self)
+        self.refreshtimer.timeout.connect(self.OnTimer)
+
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.refreshtimer.start( 500 )
         
@@ -127,7 +125,8 @@ class MyForm(QtGui.QMainWindow):
             
     def StartGNURadio(self):
         if os.fork() == 0:
-            os.execvp("gnome-terminal",("gnome-terminal","-x","bash","-c", "/home/lilac/workspace_l1/ftp_server_simulator/Debug/ftp_server_simulator -a20 -s127.0.0.1 -fpacketlog_node4.db"))
+            #os.execvp("gnome-terminal",("gnome-terminal","-x","bash","-c", "/home/lilac/workspace_l1/ftp_server_simulator/Debug/ftp_server_simulator -a20 -s127.0.0.1 -fpacketlog_node4.db"))
+            os.execvp("xfce4-terminal",("xfce4-terminal","-x","bash","-c", "/home/lilac/workspace_l1/ftp_server_simulator/Debug/ftp_server_simulator -a20 -s127.0.0.1 -fpacketlog_node4.db"))
     
     
     def SaveData(self):
@@ -181,7 +180,7 @@ class MyForm(QtGui.QMainWindow):
     def UpdateOrbit(self):
         
         try:
-            f=urllib2.urlopen(str(self.ui.txt_TLE.text()))
+            f=urllib.request.urlopen(str(self.ui.txt_TLE.text()))
             tle = f.read()
             tle=tle.split("\n")
             
@@ -197,10 +196,10 @@ class MyForm(QtGui.QMainWindow):
                 fp.write("tle_line2=\"" + tle2 + "\"\n")
                 fp.close()
                 
-            print "Orbit Data Successfully Updated!"
+            print("Orbit Data Successfully Updated!")
             
         except Exception as msg:
-            print msg
+            print(msg)
         
     
     def OnQuit(self):
@@ -272,7 +271,7 @@ class MyForm(QtGui.QMainWindow):
         self.ChannelALog.write(str(self.Lat) +"\n")
         log = " ".join(["%02X"%ord(i) for i in data]) + "\n"
         self.ChannelALog.write(log)
-        print log
+        print(log)
         self.ChannelALog.flush()
         
 
@@ -289,7 +288,7 @@ class MyForm(QtGui.QMainWindow):
         self.ChannelBLog.write(str(self.Lat) +"\n")
         log = " ".join(["%02X"%ord(i) for i in data]) + "\n"
         self.ChannelBLog.write(log)
-        print log
+        print(log)
         self.ChannelBLog.flush()
     
         
@@ -319,7 +318,7 @@ class EmittingStream(QtCore.QObject):
 
     
 if __name__ == "__main__":    
-    app = QtGui.QApplication(sys.argv)  
+    app = QtWidgets.QApplication(sys.argv)  
     myapp = MyForm()    
     myapp.show()  
     sys.exit(app.exec_())

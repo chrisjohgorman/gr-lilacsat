@@ -20,7 +20,7 @@ from _dbus_bindings import String
 import xml.dom.minidom as minidom
 from xml.dom.minidom import Document
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 import json
 
@@ -178,7 +178,7 @@ class MyForm(QtGui.QMainWindow):
     def UpdateOrbit(self):
         
         try:
-            f=urllib2.urlopen(str(self.ui.txt_TLE.text()))
+            f=urllib.request.urlopen(str(self.ui.txt_TLE.text()))
             tle = f.read()
             tle=tle.split("\n")
 
@@ -203,10 +203,10 @@ class MyForm(QtGui.QMainWindow):
                 fp.write("tle_line2=\"" + tle2 + "\"\n")
                 fp.close()
                 
-            print "Orbit Data Successfully Updated!"
+            print("Orbit Data Successfully Updated!")
             
         except Exception as msg:
-            print msg
+            print(msg)
         
     
     def OnQuit(self):
@@ -273,7 +273,7 @@ class MyForm(QtGui.QMainWindow):
         self.ChannelALog.write(str(self.Lat) +"\n")
         log = " ".join(["%02X"%ord(i) for i in data]) + "\n"
         self.ChannelALog.write(log)
-        print log
+        print(log)
         self.ChannelALog.flush()
         
 
@@ -290,7 +290,7 @@ class MyForm(QtGui.QMainWindow):
         self.ChannelBLog.write(str(self.Lat) +"\n")
         log = " ".join(["%02X"%ord(i) for i in data]) + "\n"
         self.ChannelBLog.write(log)
-        print log
+        print(log)
         self.ChannelBLog.flush()
     
         

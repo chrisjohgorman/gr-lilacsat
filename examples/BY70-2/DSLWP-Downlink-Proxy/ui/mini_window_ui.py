@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -15,12 +15,12 @@ except AttributeError:
         return s
 
 try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
+    _encoding = QtWidgets.QApplication.UnicodeUTF8
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+        return QtWidgets.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+        return QtWidgets.QApplication.translate(context, text, disambig)
 
 class Ui_new_server_window(object):
     def setupUi(self, new_server_window):
@@ -28,31 +28,31 @@ class Ui_new_server_window(object):
         new_server_window.resize(394, 231)
         new_server_window.setMinimumSize(QtCore.QSize(394, 231))
         new_server_window.setMaximumSize(QtCore.QSize(394, 231))
-        self.Server_Name = QtGui.QLineEdit(new_server_window)
+        self.Server_Name = QtWidgets.QLineEdit(new_server_window)
         self.Server_Name.setGeometry(QtCore.QRect(110, 30, 241, 27))
         self.Server_Name.setObjectName(_fromUtf8("Server_Name"))
-        self.URL = QtGui.QLineEdit(new_server_window)
+        self.URL = QtWidgets.QLineEdit(new_server_window)
         self.URL.setGeometry(QtCore.QRect(110, 80, 241, 27))
         self.URL.setObjectName(_fromUtf8("URL"))
-        self.port = QtGui.QLineEdit(new_server_window)
+        self.port = QtWidgets.QLineEdit(new_server_window)
         self.port.setGeometry(QtCore.QRect(110, 130, 241, 27))
         self.port.setObjectName(_fromUtf8("port"))
-        self.label = QtGui.QLabel(new_server_window)
+        self.label = QtWidgets.QLabel(new_server_window)
         self.label.setGeometry(QtCore.QRect(20, 30, 91, 17))
         self.label.setObjectName(_fromUtf8("label"))
-        self.label_2 = QtGui.QLabel(new_server_window)
+        self.label_2 = QtWidgets.QLabel(new_server_window)
         self.label_2.setGeometry(QtCore.QRect(20, 80, 91, 17))
         self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.label_3 = QtGui.QLabel(new_server_window)
+        self.label_3 = QtWidgets.QLabel(new_server_window)
         self.label_3.setGeometry(QtCore.QRect(20, 130, 91, 17))
         self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.create_server = QtGui.QPushButton(new_server_window)
+        self.create_server = QtWidgets.QPushButton(new_server_window)
         self.create_server.setGeometry(QtCore.QRect(170, 200, 97, 26))
         self.create_server.setObjectName(_fromUtf8("create_server"))
-        self.close = QtGui.QPushButton(new_server_window)
+        self.close = QtWidgets.QPushButton(new_server_window)
         self.close.setGeometry(QtCore.QRect(280, 200, 97, 26))
         self.close.setObjectName(_fromUtf8("close"))
-        self.kiss_decoder_enable = QtGui.QCheckBox(new_server_window)
+        self.kiss_decoder_enable = QtWidgets.QCheckBox(new_server_window)
         self.kiss_decoder_enable.setGeometry(QtCore.QRect(160, 170, 191, 22))
         self.kiss_decoder_enable.setObjectName(_fromUtf8("kiss_decoder_enable"))
 

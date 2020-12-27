@@ -54,9 +54,9 @@ class LinkToGRC(threading.Thread):
             self.grc_listener.bind((self.host, self.port))
             self.grc_listener.listen(1)
         except socket.error as msg:
-            print(
+            print((
                 "[" + self.name + "]"
-                + " Fialed To Create Socket Or Listen" + str(msg))
+                + " Fialed To Create Socket Or Listen" + str(msg)))
             self.grc_listener.close()
 
     def run(self):
@@ -74,7 +74,7 @@ class LinkToGRC(threading.Thread):
                     self.is_connected = True
                     self.connection = conn
                     select_input.append(conn)
-                    print('connect ' + str(addr))
+                    print(('connect ' + str(addr)))
                 data = conn.recv(1024)
 
                 if not data:  # 如果客户端主动断开连接， 则服务器在下一个循环重新等待客户连接

@@ -4,7 +4,7 @@ import time
 import threading
 import socket    
 import select
-import Queue
+import queue
 
 
 class SocketSender(threading.Thread):
@@ -14,7 +14,7 @@ class SocketSender(threading.Thread):
         self.MyName = MyName
         self.CallBackFun = CB
         self.Proxy_Interface = Proxy_Interface
-        self.SendQueue = Queue.Queue()
+        self.SendQueue = queue.Queue()
         self.ReSendBuf = None
         
     
@@ -33,7 +33,7 @@ class SocketSender(threading.Thread):
                 if len(outfds)!=0:
                     if self.ReSendBuf != None:
                         data = self.ReSendBuf
-                        print("["+self.MyName+"]"+ "Trying To Send Resend Buffer")
+                        print(("["+self.MyName+"]"+ "Trying To Send Resend Buffer"))
                         self.ReSendBuf = None
                     else:
                         data = self.SendQueue.get()
@@ -45,10 +45,10 @@ class SocketSender(threading.Thread):
                     
                     try:
                         self.Proxy_Interface.sock.send(data_s)
-                        print("["+self.MyName+"]"+"Successfully Send Data Length = %d"%len(data)  )
+                        print(("["+self.MyName+"]"+"Successfully Send Data Length = %d"%len(data)  ))
                     except socket.error as msg:
                         self.ReSendBuf = data
-                        print("["+self.MyName+"]"+"Fialed To Send" + str(msg))
+                        print(("["+self.MyName+"]"+"Fialed To Send" + str(msg)))
             else:
                 time.sleep(0.05)
 
@@ -57,7 +57,7 @@ class SocketSender(threading.Thread):
         
     def stop(self):     
         self.thread_stop = True
-        print("["+self.MyName+"]"+"Sender Is Stopping")    
+        print(("["+self.MyName+"]"+"Sender Is Stopping"))    
 
 
 
@@ -97,23 +97,23 @@ class ProxyConnectInterface(threading.Thread):
                 try:
                     self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 except socket.error as msg:
-                    print("["+self.MyName+"]"+"Fialed To Create Socket" + str(msg))
+                    print(("["+self.MyName+"]"+"Fialed To Create Socket" + str(msg)))
                     time.sleep(0.1)
                     continue
                 
                 try:
                     self.sock.connect((self.Host,self.Port))
                     while (self.sock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR) <0):
-                            print "Connection Not Ready..."
+                            print("Connection Not Ready...")
                             time.sleep(0.1)
                             pass
                     if self.CB_Connected != None:
                         self.CB_Connected()
                         
                     self.StateNow=2
-                    print ("["+self.MyName+"]"+"Connected...")
+                    print(("["+self.MyName+"]"+"Connected..."))
                 except socket.error as msg:
-                    print("["+self.MyName+"]"+"Failed To Connect To ..."+str(msg))
+                    print(("["+self.MyName+"]"+"Failed To Connect To ..."+str(msg)))
                     try:
                         self.sock.close()
                         self.sock = None
@@ -122,7 +122,7 @@ class ProxyConnectInterface(threading.Thread):
                     time.sleep(0.5)
                     self.TryTimeOut+=1
                     if (self.TryTimeOut>10):
-                        print("["+self.MyName+"]"+"Try To Connect 10 Times But All Failed,Stop Trying Again...")
+                        print(("["+self.MyName+"]"+"Try To Connect 10 Times But All Failed,Stop Trying Again..."))
                         self.StateNow=0;
                     continue
 
@@ -133,32 +133,32 @@ class ProxyConnectInterface(threading.Thread):
                         try:
                             data = self.sock.recv(1024)
                             if data:#如果收到的数据不是空字符串
-                                print("["+self.MyName+"]"+"Received Data ...")
+                                print(("["+self.MyName+"]"+"Received Data ..."))
                                 if self.Rcv_CB != None:
                                     self.Rcv_CB(self,data)
                             else:#收到空字符串，认为是对方断开链接
                                 self.sock.close()
                                 self.sock = None
                                 self.StateNow=0;
-                                print ("["+self.MyName+"]"+"The Connection Is Closed...")
+                                print(("["+self.MyName+"]"+"The Connection Is Closed..."))
                                 break;
                         except socket.error as msg:
                             self.sock.close()
                             self.sock = None
                             self.StateNow=0;
-                            print("["+self.MyName+"]"+"Error In Recv ..."+str(msg))
+                            print(("["+self.MyName+"]"+"Error In Recv ..."+str(msg)))
                             break;
                          
                     else:
-                        print ("["+self.MyName+"]"+"No Data In 5 Seconds...") 
+                        print(("["+self.MyName+"]"+"No Data In 5 Seconds...")) 
                         pass
                     
   
-        print("["+self.MyName+"]"+"Stopped")
+        print(("["+self.MyName+"]"+"Stopped"))
         
         while self.sender.isAlive() == True:
             time.sleep(0.1)
-        print("["+self.MyName+"]"+" Sender Stopped")
+        print(("["+self.MyName+"]"+" Sender Stopped"))
 
     def SendData(self,data):
         self.sender.SendData(data)       
@@ -166,7 +166,7 @@ class ProxyConnectInterface(threading.Thread):
     def stop(self):    
         self.sender.stop() 
         self.thread_stop = True 
-        print("["+self.MyName+"]"+"Stopping")
+        print(("["+self.MyName+"]"+"Stopping"))
         
 
 
@@ -201,7 +201,7 @@ class ProxyListenInterface(threading.Thread):
                     self.listen_sock.listen(1)
                     self.StateNow=1
                 except socket.error as msg:
-                    print("["+self.MyName+"]"+"Fialed To Create Socket Or Linsten" + str(msg))
+                    print(("["+self.MyName+"]"+"Fialed To Create Socket Or Linsten" + str(msg)))
                     self.listen_sock.close()
                     time.sleep(0.1)
                     continue
@@ -218,12 +218,12 @@ class ProxyListenInterface(threading.Thread):
                         self.listen_sock = None
                         
                         while (self.sock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR) <0):
-                            print "Connection Not Ready..."
+                            print("Connection Not Ready...")
                             time.sleep(0.1)
                             pass
             
                         
-                        print("["+self.MyName+"]"+"Connected To Proxy...")
+                        print(("["+self.MyName+"]"+"Connected To Proxy..."))
                         if self.CB_Connected != None:
                             self.CB_Connected()
                         self.StateNow=2#切换到下一个状态，等待接收数据
@@ -244,20 +244,20 @@ class ProxyListenInterface(threading.Thread):
                         try:
                             data = self.sock.recv(1024)
                             if data:#如果收到的数据不是空字符串
-                                print("["+self.MyName+"]"+"Received Data ...")
+                                print(("["+self.MyName+"]"+"Received Data ..."))
                                 if self.Rcv_CB != None:
                                     self.Rcv_CB(self,data)
                             else:#收到空字符串，认为是对方断开链接
                                 self.sock.close()
                                 self.sock = None
                                 self.StateNow=0;
-                                print ("["+self.MyName+"]"+"The Connection Is Closed...")
+                                print(("["+self.MyName+"]"+"The Connection Is Closed..."))
                                 break;
                         except socket.error as msg:
                             self.sock.close()
                             self.sock = None
                             self.StateNow=0;
-                            print("["+self.MyName+"]"+"Error In Recv ..."+str(msg))
+                            print(("["+self.MyName+"]"+"Error In Recv ..."+str(msg)))
                             break;
                          
                     else:
@@ -265,11 +265,11 @@ class ProxyListenInterface(threading.Thread):
                         pass
                     
                     
-        print("["+self.MyName+"]"+"Stopped")
+        print(("["+self.MyName+"]"+"Stopped"))
         
         while self.sender.isAlive() == True:
             time.sleep(0.1)
-        print("["+self.MyName+"]"+" Sender Stopped")
+        print(("["+self.MyName+"]"+" Sender Stopped"))
                     
     def SendData(self,data):
         self.sender.SendData(data)
@@ -277,5 +277,5 @@ class ProxyListenInterface(threading.Thread):
     def stop(self):  
         self.sender.stop()   
         self.thread_stop = True
-        print("["+self.MyName+"]"+"Stopping")
+        print(("["+self.MyName+"]"+"Stopping"))
         

@@ -1,5 +1,5 @@
 # coding:utf-8
-import Queue
+import queue
 import time
 import codecs
 import json
@@ -27,14 +27,14 @@ class server_data(object):
         self.server_dict.pop(name)
 
     def select_server(self, name):
-        if name in self.server_dict.keys():
+        if name in list(self.server_dict.keys()):
             return self.server_dict[name]
 
     def show_all_names(self):
         '''
         @ 返回全部服务器的名字
         '''
-        return self.server_dict.keys()
+        return list(self.server_dict.keys())
 
 
 class port_data(object):
@@ -97,7 +97,7 @@ class DataBuf(object):
     '''
     def __init__(self, Name):
         self.name = Name
-        self.data_buff = Queue.Queue()  # 队列中存储http_data
+        self.data_buff = queue.Queue()  # 队列中存储http_data
         self.sender = None
         self.enable_kiss_decode = False
         self.info = None  # info 保存应该发送给服务器的其他参数 e.g. sat_name

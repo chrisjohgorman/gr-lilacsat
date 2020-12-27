@@ -3,14 +3,14 @@
 使用Socket连接服务器
 '''
 import threading
-import Queue
+import queue
 import time
 import select
 import socket
 import codecs
 import struct
 
-from temp_to_add_header import add_HTY_header
+from .temp_to_add_header import add_HTY_header
 
 class SocketSender(threading.Thread):
     '''
@@ -24,7 +24,7 @@ class SocketSender(threading.Thread):
         self.thread_stop = False
         self.MyName = MyName
         self.Protocol = Protocol
-        self.SendQueue = Queue.Queue()
+        self.SendQueue = queue.Queue()
         self.ReSendBuf = None
         self.is_connected = False
 
@@ -38,7 +38,7 @@ class SocketSender(threading.Thread):
             # 建立连接对象
             self.socket_sender = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except socket.error as msg:
-            print("["+self.MyName+"]"+"Failed To Create Socket" + str(msg))
+            print(("["+self.MyName+"]"+"Failed To Create Socket" + str(msg)))
         
     def _connect(self):
         try:
@@ -48,10 +48,10 @@ class SocketSender(threading.Thread):
             while(self.socket_sender.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR) < 0):
                 print("Connection Not Ready...")
                 time.sleep(0.1)
-            print("["+self.MyName+"]"+"Connected...")
+            print(("["+self.MyName+"]"+"Connected..."))
             self.is_connected = True
         except socket.error as msg:
-            print("["+self.MyName+"]"+"Failed To Connect To ..."+str(msg))
+            print(("["+self.MyName+"]"+"Failed To Connect To ..."+str(msg)))
 
     def run(self):
         while not self.thread_stop:
@@ -73,19 +73,19 @@ class SocketSender(threading.Thread):
                     # 这里的局部变量data是要发送的数据
                     if self.ReSendBuf is not None:
                         data = self.ReSendBuf
-                        print("["+self.MyName+"]" + "Trying To Send Resend Buffer")
+                        print(("["+self.MyName+"]" + "Trying To Send Resend Buffer"))
                         self.ReSendBuf = None
                     else:
                         data = self.SendQueue.get()
 
                     try:
                         self.socket_sender.send(data)
-                        print(self.socket_sender.recv(1024))
-                        print("["+self.MyName+"]" + "Successfully Send Data Length = %d" % len(data))
+                        print((self.socket_sender.recv(1024)))
+                        print(("["+self.MyName+"]" + "Successfully Send Data Length = %d" % len(data)))
                     except socket.error as msg:
                         # 数据未发送：重新发送
                         self.ReSendBuf = data
-                        print("["+self.MyName+"]"+"Fialed To Send" + str(msg))
+                        print(("["+self.MyName+"]"+"Fialed To Send" + str(msg)))
 
                 if len(infds) != 0:
                     recv_data = self.socket_sender.recv(1024)
@@ -107,4 +107,4 @@ class SocketSender(threading.Thread):
 
     def stop(self):
         self.thread_stop = True
-        print("["+self.MyName+"]"+"Sender Is Stopping")
+        print(("["+self.MyName+"]"+"Sender Is Stopping"))
