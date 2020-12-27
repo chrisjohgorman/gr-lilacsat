@@ -30,6 +30,8 @@ extern "C"
 	#include "ccsds/ccsds.h"
 }
 
+using namespace boost::placeholders;
+
 namespace gr {
   namespace lilacsat {
 

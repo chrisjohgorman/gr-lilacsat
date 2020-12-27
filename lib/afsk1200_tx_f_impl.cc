@@ -34,6 +34,7 @@
 
 #define ERROR()	std::cout << "Error!" << std::endl; //exit(0);
 
+using namespace boost::placeholders;
 
 namespace gr {
   namespace lilacsat {

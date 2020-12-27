@@ -25,6 +25,8 @@
 #include <gnuradio/io_signature.h>
 #include "file_sink_pdu_impl.h"
 
+using namespace boost::placeholders;
+
 namespace gr {
   namespace lilacsat {
 

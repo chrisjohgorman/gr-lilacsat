@@ -61,6 +61,8 @@ static unsigned char sequence[255] =
     0x08, 0x78, 0xC4, 0x4A, 0x66, 0xF5, 0x58
 };
 
+using namespace boost::placeholders;
+
 namespace gr {
   namespace lilacsat {
 

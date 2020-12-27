@@ -40,6 +40,8 @@ extern "C"
 	#include "serial/serial.h"
 }
 
+using namespace boost::placeholders;
+
 namespace gr {
   namespace lilacsat {
 

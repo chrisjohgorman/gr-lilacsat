@@ -37,6 +37,8 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+using namespace boost::placeholders;
+
 namespace gr {
   namespace lilacsat {
 

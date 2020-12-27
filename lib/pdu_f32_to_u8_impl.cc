@@ -25,6 +25,8 @@
 #include <gnuradio/io_signature.h>
 #include "pdu_f32_to_u8_impl.h"
 
+using namespace boost::placeholders;
+
 namespace gr {
   namespace lilacsat {
 

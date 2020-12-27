@@ -25,6 +25,8 @@
 #include <gnuradio/io_signature.h>
 #include "two_bit_dpd_precoder_impl.h"
 
+using namespace boost::placeholders;
+
 namespace gr {
   namespace lilacsat {
 
