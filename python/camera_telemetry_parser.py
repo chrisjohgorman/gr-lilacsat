@@ -23,7 +23,7 @@ import numpy
 from gnuradio import gr
 import pmt
 
-import telemetry
+from . import telemetry
 from construct.core import ConstError
 from csp.csp_header import CSP
 import struct
@@ -44,7 +44,7 @@ class camera_telemetry_parser(gr.basic_block):
     def handle_msg(self, msg_pmt):
         msg = pmt.cdr(msg_pmt)
         if not pmt.is_u8vector(msg):
-            print "[ERROR] Received invalid message type. Expected u8vector"
+            print("[ERROR] Received invalid message type. Expected u8vector")
             return
         packet = bytearray(pmt.u8vector_elements(msg))
 
@@ -55,7 +55,7 @@ class camera_telemetry_parser(gr.basic_block):
         packet_number = struct.unpack('<I', packet[-8:-4])[0]
 
         if csp.destination == 6:
-            print 'Packet number', packet_number, '(camera)'
+            print('Packet number', packet_number, '(camera)')
             return
         
         # destination 5 is used for telemetry
@@ -64,25 +64,25 @@ class camera_telemetry_parser(gr.basic_block):
 
         data = telemetry.beacon_parse(packet[4:])
         if data:
-            print 'Packet number', packet_number, '(telemetry)'
+            print('Packet number', packet_number, '(telemetry)')
             if 'payload_mode' in data:
-                print
-                print '#'*30
-                print 'Open telecommand:', data.payload_mode.open_telecommand
-                print 'Camera task:', data.payload_mode.camera_task
-                print 'Valid image data:', data.payload_mode.valid_image_data
-                print 'Camera power:', data.payload_mode.camera_power
-                print '#'*30
-                print
+                print()
+                print('#'*30)
+                print('Open telecommand:', data.payload_mode.open_telecommand)
+                print('Camera task:', data.payload_mode.camera_task)
+                print('Valid image data:', data.payload_mode.valid_image_data)
+                print('Camera power:', data.payload_mode.camera_power)
+                print('#'*30)
+                print()
             elif 'cam_ham_interval' in data:
-                print
-                print '#'*30
-                print 'Cam ham interval:', data.cam_ham_interval, 'minutes'
-                print 'Cam ham en:', hex(data.cam_ham_en)
-                print '#'*30
-                print
+                print()
+                print('#'*30)
+                print('Cam ham interval:', data.cam_ham_interval, 'minutes')
+                print('Cam ham en:', hex(data.cam_ham_en))
+                print('#'*30)
+                print()
         else:
-            print 'Could not parse beacon'
-            print
+            print('Could not parse beacon')
+            print()
 
         

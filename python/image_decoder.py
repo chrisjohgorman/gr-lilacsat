@@ -59,7 +59,7 @@ class image_decoder(gr.basic_block):
     def handle_msg(self, msg_pmt):
         msg = pmt.cdr(msg_pmt)
         if not pmt.is_u8vector(msg):
-            print "[ERROR] Received invalid message type. Expected u8vector"
+            print("[ERROR] Received invalid message type. Expected u8vector")
             return
         packet = bytearray(pmt.u8vector_elements(msg))
 
@@ -76,7 +76,7 @@ class image_decoder(gr.basic_block):
         data = packet[15:-8]
 
         if flag in flags:
-            print 'Received flag', flags[flag]
+            print('Received flag', flags[flag])
             return
 
         filename = os.path.join(self.path, str(image_id) + '.jpg')
@@ -100,7 +100,7 @@ class image_decoder(gr.basic_block):
         
         if self.remaining[image_id] <= 0:
             # image finished
-            print 'Finished downloading image', image_id
+            print('Finished downloading image', image_id)
             f.close()
             del self.remaining[image_id]
             del self.files[image_id]
