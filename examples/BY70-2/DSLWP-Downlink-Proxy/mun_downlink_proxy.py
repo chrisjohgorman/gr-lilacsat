@@ -536,7 +536,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # wait for closing
         for sock in self.socket_to_grc_list:
-            while sock.is_alive():
+            while sock.isAlive():
                 time.sleep(0.2)
         # remove proxy obj
         self.socket_to_grc_list = list()
